@@ -1,0 +1,172 @@
+*** Settings ***
+# List of libraries and resources to be used within the whole project
+# This includes all files from the PageObjects folder
+Library     AppiumLibrary
+Library    ../Assets/TodoUtils.py
+Resource    ../Common.robot
+Variables   ../Assets/testdata.py
+
+*** Variables ***
+# List of variables to be used within the page
+# Includes locator paths of every element within the page
+# Scalar Variables
+${expected_home_desc}   Todo App
+${lbl_home_brand}    xpath=//android.view.View[@content-desc="${expected_home_desc}"]
+${btn_add}      xpath=//android.widget.Button[@content-desc="Add"]
+${txt_todo_container}    xpath=(//android.widget.EditText)[1]
+${txt_todo_input}    xpath=(//android.widget.EditText)[2]
+${lbl_todo_counter}     xpath=//android.view.View[contains(@content-desc, "todo-counter")]
+${lbl_empty_state}  xpath=//android.view.View[contains(@content-desc, "empty-state")]
+${chk_complete_todo}    xpath=//android.widget.CheckBox[@content-desc="Mark complete, todo-checkbox-1"]/android.widget.CheckBox
+${btn_delete_todo}    xpath=//android.widget.Button[@content-desc="Delete todo, delete-button-1"]/android.widget.Button
+${btn_save_edit_todo}   xpath=//android.widget.Button[contains(@content-desc, "save-edit")]
+${btn_cancel_edit_todo}   xpath=//android.widget.Button[contains(@content-desc, "cancel-edit")]
+
+*** Keywords ***
+### GIVEN ###
+### WHEN ###
+### THEN ###
+
+I open the application
+    Wait Until Element Is Visible    ${lbl_home_brand}    10s
+    ${actual_desc}=    Get Element Attribute    ${lbl_home_brand}    content-desc
+    Should Be Equal    ${actual_desc}    ${expected_home_desc}
+
+*** Keywords ***
+
+I click the add button
+    Wait Until Element Is Visible    ${btn_add}   10s
+    Click Element   ${btn_add}
+
+I add a Todo item titled
+    [Arguments]    ${todo_item}
+    Click Element    ${txt_todo_container}
+    ${focused}=    Get Element Attribute    ${txt_todo_input}    focused
+    Should Be Equal    ${focused}    true
+    Input Text    ${txt_todo_input}    ${todo_item}
+    I click the add button
+
+The Todo item should be displayed as
+    [Arguments]    ${todo_item}
+    Element Should Be Visible   xpath=//android.view.View[contains(@content-desc, "${todo_item}")]
+
+The Todo input field should be empty
+    ${text}=    Get Text    ${txt_todo_input}
+    Should Be Empty    ${text}
+
+I add multiple todo items
+    [Arguments]    @{todo_items}
+    FOR     ${item}    IN    @{todo_items}
+        I add a Todo item titled   ${item}
+        The Todo item should be displayed as    ${item}
+    END
+
+I delete a Todo item titled
+    [Arguments]    ${exist_todo_item}
+    Wait Until Element Is Visible    xpath=//android.view.View[contains(@content-desc, "${exist_todo_item}")]   10s
+    Click Element    xpath=//android.view.View[contains(@content-desc, "${exist_todo_item}")]/child::android.widget.Button[contains(@content-desc, "delete")]
+   
+The Todo item should be deleted successfully
+    [Arguments]    ${exist_todo_item}
+    Run Keyword And Expect Error    *    Element Should Be Visible    xpath=//android.view.View[contains(@content-desc, "${exist_todo_item}")]
+
+Get checkbox locator for todo item
+    [Arguments]    ${todo_title}
+    ${locator}=    Set Variable    xpath=//android.view.View[contains(@content-desc, "${todo_title}")]//android.widget.CheckBox[@content-desc]
+    RETURN    ${locator}
+
+I mark the complete checkbox to complete a Todo item in my list
+    [Arguments]    ${todo_title}
+    ${checkbox}=    Get checkbox locator for todo item    ${todo_title}
+    Element Should Be Visible    ${checkbox}
+    ${checked}=    Get Element Attribute    ${checkbox}    checked
+    Should Be Equal    ${checked}    false
+    Click Element    ${checkbox}
+
+The Todo item checkbox should be marked as complete
+    [Arguments]    ${todo_title}
+    ${checkbox}=    Get checkbox locator for todo item    ${todo_title}
+    ${checked}=    Get Element Attribute    ${checkbox}    checked
+    Should Be Equal    ${checked}    true
+    
+I uncheck the complete checkbox to mark a Todo item as incomplete
+    [Arguments]    ${todo_title}
+    ${checkbox}=    Get checkbox locator for todo item    ${todo_title}
+    Element Should Be Visible    ${checkbox}
+    ${checked}=    Get Element Attribute    ${checkbox}    checked
+    Should Be Equal    ${checked}    true
+    Click Element    ${checkbox}
+
+The Todo item checkbox should be marked as incomplete
+    [Arguments]    ${todo_title}
+    ${checkbox}=    Get checkbox locator for todo item    ${todo_title}
+    ${checked}=    Get Element Attribute    ${checkbox}    checked
+    Should Be Equal    ${checked}    false
+
+I have not added any todo items
+    Element Should Be Visible    ${lbl_empty_state}
+
+The empty state message should be displayed
+    [Arguments]    ${expected_partial_message}=No todos yet
+    ${actual_message}=    Get Element Attribute    ${lbl_empty_state}    content-desc
+    Should Contain    ${actual_message}    ${expected_partial_message}
+
+Get the count of todo items
+    ${counter_text}=    Get Element Attribute    ${lbl_todo_counter}    content-desc
+    ${count}=    Extract Todo Count    ${counter_text}
+    RETURN    ${count}
+
+The todo items count should be
+    [Arguments]     ${expected_count}
+    ${actual_count}=    Get the count of todo items
+    Should Be Equal As Integers    ${actual_count}    ${expected_count}
+
+I click the edit button for the todo item titled
+    [Arguments]    ${todo_title}
+    ${btn_edit}=    Set Variable    xpath=//android.view.View[ends-with(@content-desc, "${todo_title}")]//android.widget.Button[contains(@content-desc, "edit")]
+    Click Element    ${btn_edit}
+    
+I clear the input field
+    [Arguments]    ${locator}
+    ${focused}=    Get Element Attribute    ${locator}    focused
+    Should Be Equal    ${focused}    true
+    Clear Text    ${locator}
+
+I update the todo item titled
+    [Arguments]    ${old_title}    ${new_title}
+    ${txt_initial_input}=    Set Variable    xpath=//android.widget.EditText[@text="${old_title}"]
+    Click Element   ${txt_initial_input}
+    I clear the input field     ${txt_initial_input}
+    ${txt_focused_input}=    Set Variable    xpath=//android.widget.EditText[@focused='true']
+    Input Text    ${txt_focused_input}    ${new_title}
+    Click Element    ${btn_save_edit_todo}
+
+Then The todo item titled should be visible
+    [Arguments]     ${new_todo_item}
+    Element Should Be Visible   xpath=//android.view.View[contains(@content-desc, "${new_todo_item}")]
+
+The old todo item should not be visible
+    [Arguments]     ${old_todo_item}
+    Run Keyword And Expect Error    *    Element Should Be Visible   xpath=//android.view.View[contains(@content-desc, "${old_todo_item}")]
+
+I click the close button to cancel editing
+    Wait Until Element Is Visible   ${btn_cancel_edit_todo}   10s
+    Click Element   ${btn_cancel_edit_todo}
+
+I type a todo item with length
+    [Arguments]    ${input_length}
+    Click Element    ${txt_todo_container}
+    ${focused}=    Get Element Attribute    ${txt_todo_input}    focused
+    Should Be Equal    ${focused}    true
+    ${todo_item}=    Generate Random String    ${input_length}    [LETTERS]
+    Input Text    ${txt_todo_input}    ${todo_item}
+    RETURN  ${todo_item}
+
+Character counter should be
+    [Arguments]    ${input_length}
+    ${max_limit}=    Set Variable    200
+    ${remaining}=    Evaluate   ${max_limit} - ${input_length}
+    Run Keyword If    ${remaining} == 0
+    ...    Element Should Be Visible    xpath=//android.view.View[@content-desc="No characters remaining"]
+    ...  ELSE
+    ...    Element Should Be Visible    xpath=//android.view.View[contains(@content-desc, "${remaining} characters remaining")]

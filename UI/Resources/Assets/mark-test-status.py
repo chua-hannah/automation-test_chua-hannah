@@ -1,0 +1,8 @@
+from robot.libraries.BuiltIn import BuiltIn
+from robot.libraries.BuiltIn import _Misc
+import robot.api.logger as logger
+from robot.api.deco import keyword
+
+@keyword("TEST STATUS")
+def testStatus(status, reason):
+     driver = BuiltIn().get_library_instance('AppiumLibrary')._current_application()
