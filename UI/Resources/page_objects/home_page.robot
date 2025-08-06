@@ -1,10 +1,8 @@
 *** Settings ***
-# List of libraries and resources to be used within the whole project
-# This includes all files from the PageObjects folder
 Library     AppiumLibrary
-Library    ../Assets/TodoUtils.py
-Resource    ../Common.robot
-Variables   ../Assets/testdata.py
+Library    ../assets/todo_utils.py
+Resource    ../common.robot
+Variables   ../assets/testdata.py
 
 *** Variables ***
 # List of variables to be used within the page
@@ -30,8 +28,6 @@ I open the application
     ${actual_desc}=    Get Element Attribute    ${lbl_home_brand}    content-desc
     Should Be Equal    ${actual_desc}    ${expected_home_desc}
 
-*** Keywords ***
-
 I click the add button
     Wait Until Element Is Visible    ${btn_add}   10s
     Click Element   ${btn_add}
@@ -46,6 +42,7 @@ I add a todo item titled
 
 the Todo item should be displayed as
     [Arguments]    ${todo_item}
+    Wait Until Element Is Visible    xpath=//android.view.View[contains(@content-desc, "${todo_item}")]   10s
     Element Should Be Visible   xpath=//android.view.View[contains(@content-desc, "${todo_item}")]
 
 the Todo input field should be empty

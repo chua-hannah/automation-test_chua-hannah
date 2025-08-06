@@ -1,7 +1,6 @@
 *** Settings ***
 # List of libraries and resources to be used within the whole project
-# This includes all files from the PageObjects folder
-Library     Assets/mark-test-status.py
+# This includes all files from the page_objects folder
 Library     String
 Library     AppiumLibrary
 Variables   Assets/config.py
@@ -13,7 +12,7 @@ Variables   Assets/testdata.py
 
 # LOCAL
 ${REMOTE_URL}     http://127.0.0.1:4723
-${PLATFORM_NAME}    android
+${PLATFORM_NAME}    Android
 # Replace with your device name
 ${DEVICE_NAME}      emulator-5554
 # Replace with your platform version

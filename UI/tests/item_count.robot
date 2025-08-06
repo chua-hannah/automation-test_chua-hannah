@@ -1,8 +1,8 @@
 *** Settings ***
-# Always add `Common.robot` resource file
+# Always add `common.robot` resource file
 # List of setup and teardown methods to be used within the script
-Resource    ../Resources/Common.robot
-Resource    ../Resources/PageObjects/LoginPO.robot
+Resource    ../resources/common.robot
+Resource    ../resources/page_objects/home_page.robot
 Test Setup  Setup Test Environment
 Test Teardown     End Result
 Force Tags  e2e
