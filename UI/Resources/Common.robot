@@ -15,7 +15,7 @@ Variables   Assets/testdata.py
 ${REMOTE_URL}     http://127.0.0.1:4723
 ${PLATFORM_NAME}    android
 # Replace with your device name
-${DEVICE_NAME}      R5CWB29QC3Z
+${DEVICE_NAME}      emulator-5554
 # Replace with your platform version
 ${PLATFORM_VERSION}     15.0
 ${NO_RESET}         false
