@@ -1,10 +1,10 @@
-# Humanforce Todo App Test Automation
+# Humanforce Assessment - Todo App Test Automation by Hannah Chua
 
-This project contains UI test automation for a Humanforce - Todo mobile application using **Robot Framework** and **Appium**.
+This project contains UI test automation for a Humanforce Assessment - Todo mobile application using **Robot Framework** and **Appium** by **Hannah Chua**.
 
 ---
 
-## 🚀 Tech Stack
+## Tech Stack
 
 - [Robot Framework](https://robotframework.org/)
 - [Appium](https://appium.io/)
@@ -18,7 +18,7 @@ This project contains UI test automation for a Humanforce - Todo mobile applicat
 ### 1. Clone the project
 
 ```bash
-git clone [https://github.com/your-username/todo-robot-appium.git](https://github.com/chua-hannah/automation-test_chua-hannah.git)
+git clone https://github.com/chua-hannah/automation-test_chua-hannah.git
 cd automation-test_chua-hannah
 ```
 
@@ -32,7 +32,7 @@ pip install -r requirements.txt
 
 ---
 
-##  `requirements.txt`
+## `requirements.txt`
 
 Create a file named `requirements.txt` with the following contents:
 
@@ -44,7 +44,7 @@ Appium-Python-Client
 
 ---
 
-##  Appium Setup
+## Appium Setup
 
 ### 1. Install Appium globally
 
@@ -62,7 +62,7 @@ appium
 
 ---
 
-##  Device Setup
+## Device Setup
 
 Ensure you have an emulator or a real Android device connected:
 
@@ -72,17 +72,9 @@ adb devices
 
 ---
 
-##  Running the Tests
-
-### Option 1: Using the batch script (Windows)
+## Running the Tests
 
 Simply run:
-
-```bash
-run_tests.bat
-```
-
-### Option 2: Manual execution
 
 ```bash
 robot -d report UI/tests
@@ -96,16 +88,16 @@ Reports will be generated inside the `report/` folder:
 
 ---
 
-##  Best Practices Followed
+## Best Practices Followed
 
--  Gherkin-style test cases
--  Page Object Model (POM) via `resources/page_objects`
--  Custom test data and utilities
--  Clear separation of concerns
--  Easy local execution
+- Gherkin-style test cases
+- Page Object Model (POM) via `resources/page_objects`
+- Custom test data and utilities
+- Clear separation of concerns
+- Easy local execution
 
 ---
 
-## 📬 Contact
+## Contact
 
 For questions or collaboration, feel free to open an issue or reach out at [hannahchua013@gmail.com].

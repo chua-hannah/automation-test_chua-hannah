@@ -2,7 +2,6 @@
 Library     AppiumLibrary
 Library    ../assets/todo_utils.py
 Resource    ../common.robot
-Variables   ../assets/testdata.py
 
 *** Variables ***
 # List of variables to be used within the page
@@ -46,6 +45,7 @@ the Todo item should be displayed as
     Element Should Be Visible   xpath=//android.view.View[contains(@content-desc, "${todo_item}")]
 
 the Todo input field should be empty
+    [Documentation]    Validates that the todo input field is empty after adding a todo item
     ${text}=    Get Text    ${txt_todo_input}
     Should Be Empty    ${text}
 
@@ -73,7 +73,7 @@ Get checkbox locator for todo item
 I mark the complete checkbox to complete a todo item in my list
     [Arguments]    ${todo_title}
     ${checkbox}=    Get checkbox locator for todo item    ${todo_title}
-    Element Should Be Visible    ${checkbox}
+    Wait Until Element Is Visible    ${checkbox}    10s
     ${checked}=    Get Element Attribute    ${checkbox}    checked
     Should Be Equal    ${checked}    false
     Click Element    ${checkbox}
@@ -87,7 +87,7 @@ the Todo item checkbox should be marked as complete
 I uncheck the complete checkbox to mark a todo item as incomplete
     [Arguments]    ${todo_title}
     ${checkbox}=    Get checkbox locator for todo item    ${todo_title}
-    Element Should Be Visible    ${checkbox}
+    Wait Until Element Is Visible    ${checkbox}    10s
     ${checked}=    Get Element Attribute    ${checkbox}    checked
     Should Be Equal    ${checked}    true
     Click Element    ${checkbox}
@@ -102,11 +102,13 @@ I have not added any todo items
     Element Should Be Visible    ${lbl_empty_state}
 
 the empty state message should be displayed
+    [Documentation]    Validates the empty state message is displayed when no todo items are present
     [Arguments]    ${expected_partial_message}=No todos yet
     ${actual_message}=    Get Element Attribute    ${lbl_empty_state}    content-desc
     Should Contain    ${actual_message}    ${expected_partial_message}
 
 the todo items count label should be
+    [Documentation]    Gets the count of todo items in the UI based on the label text
     [Arguments]    ${expected_count}
     ${label_text}=    Get Element Attribute    ${lbl_todo_counter}    content-desc
     ${actual_count}=    Extract Todo Count    ${label_text}
@@ -120,12 +122,14 @@ the total number of todo items in the list should be
     Should Be Equal As Integers    ${actual_count}    ${expected_count}     List count incorrect
 
 the number of completed items should be
+    [Documentation]    Gets the count of completed todo items in the UI based on matching views
     [Arguments]    ${expected_count}
     ${elements}=    Get WebElements    xpath=//android.widget.CheckBox[@content-desc and @checked='true']
     ${actual_count}=    Get Length    ${elements}
     Should Be Equal As Integers    ${actual_count}    ${expected_count}
 
 the number of uncompleted items should be
+    [Documentation]    Gets the count of uncompleted todo items in the UI based on matching views
     [Arguments]    ${expected_count}
     ${elements}=    Get WebElements    xpath=//android.widget.CheckBox[@content-desc and @checked='false']
     ${actual_count}=    Get Length    ${elements}
@@ -153,10 +157,12 @@ I update the todo item titled
 
 Then the todo item titled should be visible
     [Arguments]     ${new_todo_item}
+    Wait Until Element Is Visible   xpath=//android.view.View[contains(@content-desc, "${new_todo_item}")]   10s
     Element Should Be Visible   xpath=//android.view.View[contains(@content-desc, "${new_todo_item}")]
 
 the old todo item should not be visible
     [Arguments]     ${old_todo_item}
+    Wait Until Element Is Visible   xpath=//android.view.View[contains(@content-desc, "${old_todo_item}")]   10s
     Run Keyword And Expect Error    *    Element Should Be Visible   xpath=//android.view.View[contains(@content-desc, "${old_todo_item}")]
 
 I click the close button to cancel editing
@@ -164,6 +170,7 @@ I click the close button to cancel editing
     Click Element   ${btn_cancel_edit_todo}
 
 I type a todo item with length
+    [Documentation]    Types a todo item with a specified length and returns the generated string
     [Arguments]    ${input_length}
     Click Element    ${txt_todo_container}
     ${focused}=    Get Element Attribute    ${txt_todo_input}    focused
@@ -173,6 +180,7 @@ I type a todo item with length
     RETURN  ${todo_item}
 
 Character counter should be
+    [Documentation]    Validates the character counter for the todo input field
     [Arguments]    ${input_length}
     ${max_limit}=    Set Variable    200
     ${remaining}=    Evaluate   ${max_limit} - ${input_length}
@@ -180,3 +188,4 @@ Character counter should be
     ...    Element Should Be Visible    xpath=//android.view.View[@content-desc="No characters remaining"]
     ...  ELSE
     ...    Element Should Be Visible    xpath=//android.view.View[contains(@content-desc, "${remaining} characters remaining")]
+    

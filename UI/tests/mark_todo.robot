@@ -5,7 +5,7 @@ Resource    ../resources/common.robot
 Resource    ../resources/page_objects/home_page.robot
 Test Setup  Setup Test Environment
 Test Teardown     End Result
-Force Tags  e2e
+Test Tags  e2e
 
 *** Test Cases ***
 # List of test cases
