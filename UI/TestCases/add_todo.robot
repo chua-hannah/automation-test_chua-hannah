@@ -5,7 +5,7 @@ Resource    ../Resources/Common.robot
 Resource    ../Resources/PageObjects/LoginPO.robot
 Test Setup  Setup Test Environment
 Test Teardown     End Result
-Force Tags  AllTestAutomationScenarios
+Force Tags  e2e
 
 *** Test Cases ***
 # List of test cases
@@ -16,21 +16,26 @@ Force Tags  AllTestAutomationScenarios
 #        Then — a testable outcome, usually caused by the action in When
 #        And | But — additional precondition used
 
-Validate that I am able to add a Todo item   
+Validate that I am able to add a todo item   
    Given I open the application
    When I add a todo item titled    Buy Groceries
-   Then The Todo item should be displayed as    Buy Groceries
-   And The todo items count should be  1
-   And The Todo input field should be empty
+   Then the todo item should be displayed as    Buy Groceries
+   Then the todo items count label should be    1
+   And the total number of todo items in the list should be   1
 
-Validate that I can add multiple Todo items
+Validate that I can add multiple todo items
    Given I open the application
    When I add multiple todo items    @{todo_items}
    ${expected_count}=    Get Length    ${todo_items}
-   Then The todo items count should be    ${expected_count}
+   Then the todo items count label should be    ${expected_count}
+   And the total number of todo items in the list should be   ${expected_count}
 
+Validate that todo input field will be cleared after adding an item
+   Given I open the application
+   When I add a todo item titled    Buy Groceries
+   Then the todo input field should be empty
 
-Validate character counter for empty todo input
+Validate character counter for empty input
    Given I open the application
    When I type a todo item with length    0
    Then Character counter should be    0
@@ -39,7 +44,7 @@ Validate that nothing happens when I click add with empty input
    Given I open the application
    When I type a todo item with length    0
    And I click the add button
-   Then The empty state message should be displayed
+   Then the empty state message should be displayed
 
 Validate character counter for 50 characters
    Given I open the application
@@ -51,8 +56,8 @@ Validate character counter for 200 characters
    When I type a todo item with length    200
    Then Character counter should be    200
 
-Validate that I am able to add a Todo item with 200 characters
+Validate that I am able to add a todo item with 200 characters
    Given I open the application
    ${todo_item}=    When I type a todo item with length   200
    And I click the add button
-   Then The Todo item should be displayed as    ${todo_item}
+   Then the todo item should be displayed as    ${todo_item}

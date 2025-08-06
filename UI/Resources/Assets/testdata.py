@@ -1,5 +1,7 @@
 todo_items = [
     "Buy Groceries",
-    "Call Mom",
-    "Read Book"
+    "Read Book",
+    "Haircut",
+    "Clean the house",
+    "Bathe my dog"
 ]

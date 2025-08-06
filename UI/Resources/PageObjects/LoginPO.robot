@@ -17,8 +17,6 @@ ${txt_todo_container}    xpath=(//android.widget.EditText)[1]
 ${txt_todo_input}    xpath=(//android.widget.EditText)[2]
 ${lbl_todo_counter}     xpath=//android.view.View[contains(@content-desc, "todo-counter")]
 ${lbl_empty_state}  xpath=//android.view.View[contains(@content-desc, "empty-state")]
-${chk_complete_todo}    xpath=//android.widget.CheckBox[@content-desc="Mark complete, todo-checkbox-1"]/android.widget.CheckBox
-${btn_delete_todo}    xpath=//android.widget.Button[@content-desc="Delete todo, delete-button-1"]/android.widget.Button
 ${btn_save_edit_todo}   xpath=//android.widget.Button[contains(@content-desc, "save-edit")]
 ${btn_cancel_edit_todo}   xpath=//android.widget.Button[contains(@content-desc, "cancel-edit")]
 
@@ -38,7 +36,7 @@ I click the add button
     Wait Until Element Is Visible    ${btn_add}   10s
     Click Element   ${btn_add}
 
-I add a Todo item titled
+I add a todo item titled
     [Arguments]    ${todo_item}
     Click Element    ${txt_todo_container}
     ${focused}=    Get Element Attribute    ${txt_todo_input}    focused
@@ -46,11 +44,11 @@ I add a Todo item titled
     Input Text    ${txt_todo_input}    ${todo_item}
     I click the add button
 
-The Todo item should be displayed as
+the Todo item should be displayed as
     [Arguments]    ${todo_item}
     Element Should Be Visible   xpath=//android.view.View[contains(@content-desc, "${todo_item}")]
 
-The Todo input field should be empty
+the Todo input field should be empty
     ${text}=    Get Text    ${txt_todo_input}
     Should Be Empty    ${text}
 
@@ -58,15 +56,15 @@ I add multiple todo items
     [Arguments]    @{todo_items}
     FOR     ${item}    IN    @{todo_items}
         I add a Todo item titled   ${item}
-        The Todo item should be displayed as    ${item}
+        the Todo item should be displayed as    ${item}
     END
 
-I delete a Todo item titled
+I delete a todo item titled
     [Arguments]    ${exist_todo_item}
     Wait Until Element Is Visible    xpath=//android.view.View[contains(@content-desc, "${exist_todo_item}")]   10s
     Click Element    xpath=//android.view.View[contains(@content-desc, "${exist_todo_item}")]/child::android.widget.Button[contains(@content-desc, "delete")]
    
-The Todo item should be deleted successfully
+the Todo item should be deleted successfully
     [Arguments]    ${exist_todo_item}
     Run Keyword And Expect Error    *    Element Should Be Visible    xpath=//android.view.View[contains(@content-desc, "${exist_todo_item}")]
 
@@ -75,7 +73,7 @@ Get checkbox locator for todo item
     ${locator}=    Set Variable    xpath=//android.view.View[contains(@content-desc, "${todo_title}")]//android.widget.CheckBox[@content-desc]
     RETURN    ${locator}
 
-I mark the complete checkbox to complete a Todo item in my list
+I mark the complete checkbox to complete a todo item in my list
     [Arguments]    ${todo_title}
     ${checkbox}=    Get checkbox locator for todo item    ${todo_title}
     Element Should Be Visible    ${checkbox}
@@ -83,13 +81,13 @@ I mark the complete checkbox to complete a Todo item in my list
     Should Be Equal    ${checked}    false
     Click Element    ${checkbox}
 
-The Todo item checkbox should be marked as complete
+the Todo item checkbox should be marked as complete
     [Arguments]    ${todo_title}
     ${checkbox}=    Get checkbox locator for todo item    ${todo_title}
     ${checked}=    Get Element Attribute    ${checkbox}    checked
     Should Be Equal    ${checked}    true
     
-I uncheck the complete checkbox to mark a Todo item as incomplete
+I uncheck the complete checkbox to mark a todo item as incomplete
     [Arguments]    ${todo_title}
     ${checkbox}=    Get checkbox locator for todo item    ${todo_title}
     Element Should Be Visible    ${checkbox}
@@ -97,7 +95,7 @@ I uncheck the complete checkbox to mark a Todo item as incomplete
     Should Be Equal    ${checked}    true
     Click Element    ${checkbox}
 
-The Todo item checkbox should be marked as incomplete
+the Todo item checkbox should be marked as incomplete
     [Arguments]    ${todo_title}
     ${checkbox}=    Get checkbox locator for todo item    ${todo_title}
     ${checked}=    Get Element Attribute    ${checkbox}    checked
@@ -106,19 +104,34 @@ The Todo item checkbox should be marked as incomplete
 I have not added any todo items
     Element Should Be Visible    ${lbl_empty_state}
 
-The empty state message should be displayed
+the empty state message should be displayed
     [Arguments]    ${expected_partial_message}=No todos yet
     ${actual_message}=    Get Element Attribute    ${lbl_empty_state}    content-desc
     Should Contain    ${actual_message}    ${expected_partial_message}
 
-Get the count of todo items
-    ${counter_text}=    Get Element Attribute    ${lbl_todo_counter}    content-desc
-    ${count}=    Extract Todo Count    ${counter_text}
-    RETURN    ${count}
+the todo items count label should be
+    [Arguments]    ${expected_count}
+    ${label_text}=    Get Element Attribute    ${lbl_todo_counter}    content-desc
+    ${actual_count}=    Extract Todo Count    ${label_text}
+    Should Be Equal As Integers    ${actual_count}    ${expected_count}     Label count incorrect
 
-The todo items count should be
-    [Arguments]     ${expected_count}
-    ${actual_count}=    Get the count of todo items
+the total number of todo items in the list should be
+    [Documentation]    Gets the count of actual todo items in the UI based on matching views
+    [Arguments]    ${expected_count}
+    ${todo_elements}=    Get WebElements    xpath=//android.view.View[contains(@content-desc, "todo-item-")]
+    ${actual_count}=    Get Length    ${todo_elements}
+    Should Be Equal As Integers    ${actual_count}    ${expected_count}     List count incorrect
+
+the number of completed items should be
+    [Arguments]    ${expected_count}
+    ${elements}=    Get WebElements    xpath=//android.widget.CheckBox[@content-desc and @checked='true']
+    ${actual_count}=    Get Length    ${elements}
+    Should Be Equal As Integers    ${actual_count}    ${expected_count}
+
+the number of uncompleted items should be
+    [Arguments]    ${expected_count}
+    ${elements}=    Get WebElements    xpath=//android.widget.CheckBox[@content-desc and @checked='false']
+    ${actual_count}=    Get Length    ${elements}
     Should Be Equal As Integers    ${actual_count}    ${expected_count}
 
 I click the edit button for the todo item titled
@@ -141,11 +154,11 @@ I update the todo item titled
     Input Text    ${txt_focused_input}    ${new_title}
     Click Element    ${btn_save_edit_todo}
 
-Then The todo item titled should be visible
+Then the todo item titled should be visible
     [Arguments]     ${new_todo_item}
     Element Should Be Visible   xpath=//android.view.View[contains(@content-desc, "${new_todo_item}")]
 
-The old todo item should not be visible
+the old todo item should not be visible
     [Arguments]     ${old_todo_item}
     Run Keyword And Expect Error    *    Element Should Be Visible   xpath=//android.view.View[contains(@content-desc, "${old_todo_item}")]
 

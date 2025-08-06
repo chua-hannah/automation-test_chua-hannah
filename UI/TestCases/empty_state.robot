@@ -5,7 +5,7 @@ Resource    ../Resources/Common.robot
 Resource    ../Resources/PageObjects/LoginPO.robot
 Test Setup  Setup Test Environment
 Test Teardown     End Result
-Force Tags  AllTestAutomationScenarios
+Force Tags  e2e
 
 *** Test Cases ***
 # List of test cases
@@ -16,8 +16,8 @@ Force Tags  AllTestAutomationScenarios
 #        Then — a testable outcome, usually caused by the action in When
 #        And | But — additional precondition used
 
-Validate that the empty state message is displayed when the Todo list is empty
+Validate that the empty state message is displayed when the todo list is empty
    Given I open the application  
    When I have not added any todo items  
-   Then The empty state message should be displayed
-   And The todo items count should be  0
+   Then the empty state message should be displayed
+   And the todo items count label should be  0

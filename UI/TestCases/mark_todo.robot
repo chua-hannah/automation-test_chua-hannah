@@ -5,7 +5,7 @@ Resource    ../Resources/Common.robot
 Resource    ../Resources/PageObjects/LoginPO.robot
 Test Setup  Setup Test Environment
 Test Teardown     End Result
-Force Tags  AllTestAutomationScenarios
+Force Tags  e2e
 
 *** Test Cases ***
 # List of test cases
@@ -16,20 +16,18 @@ Force Tags  AllTestAutomationScenarios
 #        Then — a testable outcome, usually caused by the action in When
 #        And | But — additional precondition used
 
-Validate that I can check a completed Todo item
+Validate that I can check a completed todo item
    Given I open the application
    When I add a todo item titled    Buy Groceries
-   Then The Todo item should be displayed as    Buy Groceries
-   And The Todo input field should be empty
+   Then the todo item should be displayed as    Buy Groceries
+   And the todo input field should be empty
    When I mark the complete checkbox to complete a todo item in my list    Buy Groceries
-   Then The Todo item checkbox should be marked as complete    Buy Groceries
-   Mark Test Status  Passed  This test case is Passed!
+   Then the todo item checkbox should be marked as complete    Buy Groceries
 
-Validate that I can uncheck a completed Todo item
+Validate that I can uncheck a completed todo item
     Given I open the application
-    And I add a Todo item titled    Buy Groceries
-    And I mark the complete checkbox to complete a Todo item in my list    Buy Groceries
-    Then The Todo item checkbox should be marked as complete    Buy Groceries
-    When I uncheck the complete checkbox to mark a Todo item as incomplete    Buy Groceries
-    Then The Todo item checkbox should be marked as incomplete    Buy Groceries
-    Mark Test Status  Passed  This test case is Passed!
+    And I add a todo item titled    Buy Groceries
+    And I mark the complete checkbox to complete a todo item in my list    Buy Groceries
+    Then the todo item checkbox should be marked as complete    Buy Groceries
+    When I uncheck the complete checkbox to mark a todo item as incomplete    Buy Groceries
+    Then the todo item checkbox should be marked as incomplete    Buy Groceries

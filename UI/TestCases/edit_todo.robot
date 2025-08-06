@@ -5,7 +5,7 @@ Resource    ../Resources/Common.robot
 Resource    ../Resources/PageObjects/LoginPO.robot
 Test Setup  Setup Test Environment
 Test Teardown     End Result
-Force Tags  AllTestAutomationScenarios
+Force Tags  e2e
 
 *** Test Cases ***
 # List of test cases
@@ -19,17 +19,17 @@ Force Tags  AllTestAutomationScenarios
 Validate that I can successfully update a todo item
     Given I open the application
     And I add a todo item titled    Buy Groceries
-    Then The todo item should be displayed as    Buy Groceries
+    Then the todo item should be displayed as    Buy Groceries
     When I click the edit button for the todo item titled    Buy Groceries
     And I update the todo item titled    Buy Groceries    Bathe my dog
-    Then The todo item titled should be visible     Bathe my dog
-    And The old todo item should not be visible     Buy Groceries 
+    Then the todo item titled should be visible     Bathe my dog
+    And the old todo item should not be visible     Buy Groceries 
 
 Validate that I can cancel editing a Todo item
     Given I open the application
     And I add a todo item titled    Buy Groceries
-    Then The todo item should be displayed as    Buy Groceries
+    Then the todo item should be displayed as    Buy Groceries
     When I click the edit button for the todo item titled    Buy Groceries
     And I click the close button to cancel editing
-    Then The todo item titled should be visible    Buy Groceries
+    Then the todo item titled should be visible    Buy Groceries
 

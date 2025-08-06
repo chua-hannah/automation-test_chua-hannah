@@ -12,20 +12,20 @@ Variables   Assets/testdata.py
 # Includes desired capabilities for appium
 
 # LOCAL
-${REMOTE_URL}     http://127.0.0.1:4723/wd/hub
+${REMOTE_URL}     http://127.0.0.1:4723
 ${PLATFORM_NAME}    android
-${PLATFORM_VERSION}     15
+# Replace with your device name
 ${DEVICE_NAME}      R5CWB29QC3Z
+# Replace with your platform version
+${PLATFORM_VERSION}     15.0
 ${NO_RESET}         false
 ${PACKAGE_NAME}        com.example.automation_test_app
 ${ACTIVITY_NAME}     com.example.automation_test_app.MainActivity
 
 *** Keywords ***
 Setup Test Environment
-    [Documentation]     Generic local test setup
-    Run Keyword If  '${environmentToRunTest}'=='LOCAL'      testSetupLocal
-    ...     ELSE IF     '${environmentToRunTest}'=='BROWSERSTACK'   testSetupBrowserStack
-    ...     ELSE    Log     Setup Test Environment went wrong. Please check the value of the variable 'environmentToRunTest'.
+    [Documentation]     Generic local test setup (local only)
+    testSetupLocal
 
 End result
     # List of global keywords
@@ -37,7 +37,6 @@ testSetupLocal
     ...   platformVersion=${platformVersion}
     ...   deviceName=${deviceName}
     ...   automationName=UiAutomator2
-    ...   newCommandTimeout=2500
     ...   appActivity=${ACTIVITY_NAME}
     ...   appPackage=${PACKAGE_NAME}
     ...   noReset=${NO_RESET}
@@ -45,7 +44,3 @@ testSetupLocal
 Take Screenshot
     [Arguments]     ${filename}
     Capture Page Screenshot      ${filename}
-
-Mark Test Status
-    [Arguments]     ${status}       ${reason}
-    Log    ${reason}    console=True
