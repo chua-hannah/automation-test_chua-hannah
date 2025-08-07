@@ -75,7 +75,6 @@ I mark the complete checkbox to complete a todo item in my list
     [Documentation]    Marks the checkbox for a todo item as complete.
     [Arguments]    ${todo_title}
     ${checkbox}=    Get checkbox locator for todo item    ${todo_title}
-    Wait Until Element Is Visible    ${checkbox}    10s
     ${checked}=    Get Element Attribute    ${checkbox}    checked
     Should Be Equal    ${checked}    false
     Click Element    ${checkbox}
@@ -91,7 +90,6 @@ the Todo item checkbox should be marked as complete
 I uncheck the complete checkbox to mark a todo item as incomplete
     [Arguments]    ${todo_title}
     ${checkbox}=    Get checkbox locator for todo item    ${todo_title}
-    Wait Until Element Is Visible    ${checkbox}    10s
     ${checked}=    Get Element Attribute    ${checkbox}    checked
     Should Be Equal    ${checked}    true
     Click Element    ${checkbox}
@@ -150,7 +148,12 @@ I clear the input field
     Should Be Equal    ${focused}    true
     Clear Text    ${locator}
 
+I click the save button to update the todo item
+    Wait Until Element Is Visible   ${btn_save_edit_todo}   10s
+    Click Element   ${btn_save_edit_todo}
+
 I update the todo item titled
+    [Documentation]    Updates the title of an existing todo item
     [Arguments]    ${old_title}    ${new_title}
     ${txt_initial_input}=    Set Variable    xpath=//android.widget.EditText[@text="${old_title}"]
     Click Element   ${txt_initial_input}
@@ -159,7 +162,7 @@ I update the todo item titled
     Input Text    ${txt_focused_input}    ${new_title}
     Click Element    ${btn_save_edit_todo}
 
-Then the todo item titled should be visible
+the todo item titled should be visible
     [Documentation]    Validates that the updated todo item is visible in the UI
     [Arguments]     ${new_todo_item}
     Wait Until Element Is Visible   xpath=//android.view.View[contains(@content-desc, "${new_todo_item}")]   10s
@@ -171,8 +174,16 @@ the old todo item should not be visible
     Wait Until Keyword Succeeds    5x    1s    Run Keyword And Expect Error    *    Element Should Be Visible   xpath=//android.view.View[contains(@content-desc, "${old_todo_item}")]
 
 I click the close button to cancel editing
+    [Documentation]    Clicks the cancel button to exit the edit mode without saving changes]
     Wait Until Element Is Visible   ${btn_cancel_edit_todo}   10s
     Click Element   ${btn_cancel_edit_todo}
+
+nothing should happen after clicking the save button  
+    [Documentation]    Validates that no changes occur when the save button is clicked with an empty input
+    Element Should Be Visible    ${btn_save_edit_todo}
+    ${txt_focused_input}    Set Variable    xpath=//android.widget.EditText[@focused='true']
+    ${text}=    Get Text    ${txt_focused_input}
+    Should Be Empty    ${text}
 
 I type a todo item with length
     [Documentation]    Types a todo item with a specified length and returns the generated string

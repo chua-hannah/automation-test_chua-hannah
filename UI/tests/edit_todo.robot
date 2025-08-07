@@ -35,3 +35,15 @@ Validate that I can cancel editing a Todo item
     When I click the edit button for the todo item titled    Buy Groceries
     And I click the close button to cancel editing
     Then the todo item titled should be visible    Buy Groceries
+
+Validate that editing a todo item with an empty title is not allowed
+    Given I open the application
+    And I add a todo item titled    Buy Groceries
+    Then the todo item should be displayed as    Buy Groceries
+    When I click the edit button for the todo item titled    Buy Groceries
+    ${empty_string}=    Set Variable    
+    And I update the todo item titled    Buy Groceries    ${empty_string}
+    And I click the save button to update the todo item
+    Then nothing should happen after clicking the save button  
+    And I click the close button to cancel editing
+    And the todo item titled should be visible    Buy Groceries
