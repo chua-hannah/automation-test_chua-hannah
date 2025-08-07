@@ -70,6 +70,11 @@ Ensure you have an emulator or a real Android device connected:
 adb devices
 ```
 
+The device setup and Appium desired capabilities are configured inside the `UI/resources/common.robot` file.
+Update the capabilities as needed (e.g., platform version, device name, app activity, and app package).
+
+> Note: This setup was tested using Android 15 on a real Samsung device.
+
 ---
 
 ## Running the Tests

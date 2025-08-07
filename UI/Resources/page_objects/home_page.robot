@@ -66,11 +66,13 @@ the Todo item should be deleted successfully
     Run Keyword And Expect Error    *    Element Should Be Visible    xpath=//android.view.View[contains(@content-desc, "${exist_todo_item}")]
 
 Get checkbox locator for todo item
+    [Documentation]    Returns the locator for the checkbox of a todo item based on its title.
     [Arguments]    ${todo_title}
     ${locator}=    Set Variable    xpath=//android.view.View[contains(@content-desc, "${todo_title}")]//android.widget.CheckBox[@content-desc]
     RETURN    ${locator}
 
 I mark the complete checkbox to complete a todo item in my list
+    [Documentation]    Marks the checkbox for a todo item as complete.
     [Arguments]    ${todo_title}
     ${checkbox}=    Get checkbox locator for todo item    ${todo_title}
     Wait Until Element Is Visible    ${checkbox}    10s
@@ -79,6 +81,8 @@ I mark the complete checkbox to complete a todo item in my list
     Click Element    ${checkbox}
 
 the Todo item checkbox should be marked as complete
+    [Documentation]    Verifies that the checkbox for the todo item is checked.
+    ...                Strikethrough styling is not detectable via automation, so it is skipped in this test.
     [Arguments]    ${todo_title}
     ${checkbox}=    Get checkbox locator for todo item    ${todo_title}
     ${checked}=    Get Element Attribute    ${checkbox}    checked
@@ -156,14 +160,15 @@ I update the todo item titled
     Click Element    ${btn_save_edit_todo}
 
 Then the todo item titled should be visible
+    [Documentation]    Validates that the updated todo item is visible in the UI
     [Arguments]     ${new_todo_item}
     Wait Until Element Is Visible   xpath=//android.view.View[contains(@content-desc, "${new_todo_item}")]   10s
     Element Should Be Visible   xpath=//android.view.View[contains(@content-desc, "${new_todo_item}")]
 
 the old todo item should not be visible
+    [Documentation]    Validates that the old todo item is no longer visible after updating
     [Arguments]     ${old_todo_item}
-    Wait Until Element Is Visible   xpath=//android.view.View[contains(@content-desc, "${old_todo_item}")]   10s
-    Run Keyword And Expect Error    *    Element Should Be Visible   xpath=//android.view.View[contains(@content-desc, "${old_todo_item}")]
+    Wait Until Keyword Succeeds    5x    1s    Run Keyword And Expect Error    *    Element Should Be Visible   xpath=//android.view.View[contains(@content-desc, "${old_todo_item}")]
 
 I click the close button to cancel editing
     Wait Until Element Is Visible   ${btn_cancel_edit_todo}   10s
