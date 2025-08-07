@@ -1,6 +1,6 @@
 # Humanforce Assessment - Todo App Test Automation by Hannah Chua
 
-This project contains UI test automation for a Humanforce Assessment - Todo mobile application using **Robot Framework** and **Appium** by **Hannah Chua**.
+This project contains UI test automation using Android for a Humanforce Assessment - Todo mobile application using **Robot Framework** and **Appium** by **Hannah Chua**.
 
 ---
 
